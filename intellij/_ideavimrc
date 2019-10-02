@@ -1,0 +1,21 @@
+set ic
+set ideajoin
+
+let mapleader = "'"
+
+nnoremap <leader>rr :action Run<CR>
+nnoremap <leader>rc :action RunClass<CR>
+nnoremap <leader>db :action Debug<CR>
+nnoremap <leader>dc :action DebugClass<CR>
+nnoremap <leader>h :action TypeHierarchy<CR>
+
+nnoremap <leader>c :action $Copy<CR>
+nnoremap <leader>v :action $Paste<CR>
+nnoremap <leader>x :action $Cut<CR>
+nnoremap <leader>g :action GotoLine<CR>
+nnoremap <leader>i :action GotoImplementation<CR>
+nnoremap <leader>ot :action ActivateTerminalToolWindow<CR>
+nnoremap <leader>hw :action HideActiveWindow<CR>
+nnoremap <leader>fi :action FindInPath<CR>
+
+:imap jj <Esc>
