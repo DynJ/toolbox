@@ -1,3 +1,4 @@
+CONFIG_DIR="config"
 cat > /etc/init.d/aria2c << "EOF"
 #! /bin/sh
 # /etc/init.d/aria2c
@@ -17,7 +18,7 @@ case "$1" in
  start)
  echo -n "Starting aria2c daemon: "
  umask 0000
- aria2c --conf-path=/home/pi/.aria2c/aria2.conf -D
+ aria2c --conf-path=/home/pi/_CONFIG_DIR_/aria2/aria2.conf -D
  RETVAL=$?
  echo
  ;;
