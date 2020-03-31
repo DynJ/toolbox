@@ -5,8 +5,9 @@ function connect_to_aws() {
     shift
     nodeType=$1
     shift
+    color=$1
 
-    ipAddr=$(get_aws_ec2_ip "$serviceName" "$env" "$nodeType")
+    ipAddr=$(get_aws_ec2_ip "$serviceName" "$env" "$nodeType" "$color")
     echo "$ipAddr"
 }
 
@@ -17,6 +18,8 @@ function get_aws_ec2_ip() {
     shift
     local nodeType=$1
     shift
+    local color=$1
+    shift
 
     local pid="ts"
     if [ "${serviceName}" = "jasper" ]; then
@@ -26,11 +29,17 @@ function get_aws_ec2_ip() {
     fi
 
     local instanceName="${pid}-${env}-${serviceName}"
+    local clusterName="${pid}-${env}-${serviceName}-emr-flink"
+
+    if [[ "x$color" != "x" ]] ; then
+      instanceName="${instanceName}-${color}"
+      clusterName="${clusterName}-${color}"
+    fi
 
     if [ "$nodeType" = "web" ]; then
         ipAddr=$(aws ec2 describe-instances --filters "Name=instance-state-code,Values=16" "Name=tag:Name,Values=${instanceName}-web" | jq -r ".Reservations[] | .Instances[] | .PrivateIpAddress")
     elif [ "$nodeType" = "master" ]; then
-        clusterId=$(aws emr list-clusters --active | jq -r ".Clusters[] | select(.Name == \"${instanceName}-emr-flink\") | .Id")
+        clusterId=$(aws emr list-clusters --active | jq -r ".Clusters[] | select(.Name == \"${clusterName}\") | .Id")
         ipAddr=$(aws emr list-instances --cluster-id $clusterId --instance-group-types MASTER | jq -r ".Instances[0].PrivateIpAddress")
     fi
     echo "$ipAddr"
@@ -61,17 +70,26 @@ function connect_aws() {
     ssh -i ~/.ssh/$keyname -D 8157 -o StrictHostKeyChecking=no ${username}@${ipAddr} "$@"
 }
 
-function connect_to_master_dyncalc() {
+function connect_to_jasper_master() {
+    ipAddr=`connect_to_aws jasper stg master`
+    echo "$env master node ip address is $ipAddr"
+    cmd="ssh -i ~/.ssh/jasper_nonprod -o StrictHostKeyChecking=no -A hadoop@${ipAddr} -D 8157 " 
+
+    echo $cmd
+    eval $cmd
+}
+
+function connect_to_dyncalc_master() {
     env=$1
     shift
-    clusterId=`aws emr list-clusters --active | jq -r ".Clusters[] | select(.Name == \"ts00851-$env-dyncalc-emr-flink\") | .Id"`
-    ipAddr=`aws emr list-instances --cluster-id $clusterId --instance-group-types MASTER | jq -r ".Instances[0].PrivateIpAddress"`
+    color=$1
+    shift 
+    ipAddr=`connect_to_aws dyncalc qa master green`
     echo "$env master node ip address is $ipAddr"
     cmd="ssh -i ~/.ssh/dyncalc_nonprod -o StrictHostKeyChecking=no -A hadoop@${ipAddr} -D 8157 " 
 
     echo $cmd
     eval $cmd
-#    ssh -i ~/.ssh/dyncalc_nonprod -o StrictHostKeyChecking=no -A hadoop@${ipAddr} -D 8157  "$@" 
 }
 
 

@@ -20,7 +20,7 @@ change_apt_source(){
 # change_apt_source
 
 #sudo apt-get update
-#sudo apt-get install -y aria2 ca-certificates
+#sudo apt-get install -y -q aria2 ca-certificates
 
 if [ ! -d ${DOWNLOAD_DIR} ]; then
     mkdir -p ${DOWNLOAD_DIR}
@@ -149,7 +149,7 @@ EOCFG
 
 
 # MiniDLNA
-sudo apt-get install -y minidlna
+sudo apt-get install -y -q minidlna
 sudo cp /etc/minidlna.conf /etc/minidlna.conf.origin
 sudo sed -i 's#^media_dir=/.*#media_dir='${DOWNLOAD_DIR}'#g' /etc/minidlna.conf
 sudo sed -i '/#inotify=yes/s/#//g' minidlna.conf #Enable media auto discover
@@ -157,7 +157,7 @@ sudo sed -i '$a fs.inotify.max_user_watches=65536' /etc/sysctl.conf
 
 
 # aria2-webui on lighttpd
-sudo apt-get install -y lighttpd unzip
+sudo apt-get install -y -q lighttpd unzip
 wget https://github.com/ziahamza/webui-aria2/archive/master.zip
 unzip -qu master.zip
 cd webui-aria2-master/
