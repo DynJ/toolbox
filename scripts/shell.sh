@@ -79,6 +79,15 @@ function connect_to_jasper_master() {
     eval $cmd
 }
 
+function connect_to_jasper_web() {
+    ipAddr=`connect_to_aws jasper stg web`
+    echo "$env master node ip address is $ipAddr"
+    cmd="ssh -i ~/.ssh/jasper_nonprod -o StrictHostKeyChecking=no -A ec2-user@${ipAddr}" 
+
+    echo $cmd
+    eval $cmd
+}
+
 function connect_to_dyncalc_master() {
     env=$1
     shift
