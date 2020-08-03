@@ -1,4 +1,4 @@
 #!/bin/bash
 
-yum update -y
-yum install -y git zsh epel-release
+dnf update -y
+dnf install -y git zsh epel-release
