@@ -92,3 +92,12 @@ source $ZSH/oh-my-zsh.sh
 #
 source /Users/djia/repos/github/toolbox/scripts/shell.sh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# add current time to prompt
+RPROMPT='[%D{%H:%M:%S %p}]'
+
+# refresh current time regularly
+TMOUT=5
+TRAPALRM() {
+    zle reset-prompt
+}
