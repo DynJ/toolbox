@@ -15,7 +15,8 @@ usage:
 
 ### oh-my-zsh slow, but only for certain Git repo
 
+```
 git config --add oh-my-zsh.hide-status 1 <=== you may not need it
-
 git config --add oh-my-zsh.hide-dirty 1
+```
 
