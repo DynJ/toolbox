@@ -105,3 +105,5 @@ TRAPALRM() {
 # enable fzf and use compinit to show result
 autoload -Uz compinit && compinit -d ~/.zcompdump
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+bindkey '^E^E' edit-command-line
